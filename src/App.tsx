@@ -309,7 +309,7 @@ function App() {
             <div style={photoFrame}>
               {/* BLURRED BACKGROUND */}
               <img
-                src="/aperture-scene.jpg"
+                src={`${import.meta.env.BASE_URL}aperture-scene.jpg`}
                 alt="Depth of field preview"
                 style={{
                   ...photoImage,
@@ -323,7 +323,7 @@ function App() {
 
               {/* SHARP TREE OVERLAY */}
               <img
-                src="/aperture-scene.jpg"
+                src={`${import.meta.env.BASE_URL}aperture-scene.jpg`}
                 alt=""
                 style={{
                   ...photoImage,
@@ -512,7 +512,7 @@ function App() {
             >
               <div style={thumbFrame}>
                 <img
-                  src="/aperture-scene.jpg"
+                  src={`${import.meta.env.BASE_URL}aperture-scene.jpg`}
                   alt={stop.label}
                   style={{
                     ...thumbImage,
@@ -525,7 +525,7 @@ function App() {
                 />
 
                 <img
-                  src="/aperture-scene.jpg"
+                  src={`${import.meta.env.BASE_URL}aperture-scene.jpg`}
                   alt=""
                   style={{
                     ...thumbImage,
