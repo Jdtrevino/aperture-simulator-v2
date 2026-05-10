@@ -79,8 +79,7 @@ const stops = [
     blur: 0,
     note: "Extreme depth of field. Almost everything appears sharp.",
     best: "Special cases needing maximum focus.",
-    warning:
-      "Requires much more light. May show slight diffraction softness.",
+    warning: "Requires much more light. May show slight diffraction softness.",
   },
 ];
 
@@ -97,8 +96,7 @@ function App() {
 
     return (
       minRadius +
-      ((normalized - minNormalized) /
-        (maxNormalized - minNormalized)) *
+      ((normalized - minNormalized) / (maxNormalized - minNormalized)) *
         (maxRadius - minRadius)
     );
   }, [current]);
@@ -117,13 +115,8 @@ function App() {
     const inner = apertureRadius;
     const blades = 8;
 
-    const angle =
-      (Math.PI * 2 * i) / blades + index * 0.08;
-
-    const nextAngle =
-      (Math.PI * 2 * (i + 1.35)) / blades +
-      index * 0.08;
-
+    const angle = (Math.PI * 2 * i) / blades + index * 0.08;
+    const nextAngle = (Math.PI * 2 * (i + 1.35)) / blades + index * 0.08;
     const midAngle = (angle + nextAngle) / 2;
 
     return `
@@ -141,19 +134,15 @@ function App() {
   return (
     <div style={page}>
       <header style={header}>
-        <h1 style={mainTitle}>
-          Aperture (F-Stop) Simulator
-        </h1>
+        <h1 style={mainTitle}>Aperture (F-Stop) Simulator</h1>
 
         <p style={subtitle}>
-          See how aperture changes the amount of light
-          entering the camera and how much of your photo
-          is in focus.
+          See how aperture changes the amount of light entering the camera and
+          how much of your photo is in focus.
         </p>
       </header>
 
       <main style={layout}>
-        {/* LEFT COLUMN */}
         <aside style={leftColumn}>
           <section style={card}>
             <h2 style={title}>1. SELECT F-STOP</h2>
@@ -161,9 +150,7 @@ function App() {
             <div style={wideText}>
               WIDE
               <br />
-              <span style={smallText}>
-                (More Light)
-              </span>
+              <span style={smallText}>(More Light)</span>
             </div>
 
             {stops.map((stop, i) => (
@@ -172,10 +159,7 @@ function App() {
                 onClick={() => setIndex(i)}
                 style={{
                   ...button,
-                  background:
-                    i === index
-                      ? "#4c1d75"
-                      : "#09101b",
+                  background: i === index ? "#4c1d75" : "#09101b",
                   border:
                     i === index
                       ? "1px solid #a855f7"
@@ -189,33 +173,20 @@ function App() {
             <div style={narrowText}>
               NARROW
               <br />
-              <span style={smallText}>
-                (Less Light)
-              </span>
+              <span style={smallText}>(Less Light)</span>
             </div>
           </section>
 
           <section style={card}>
-            <h2 style={title}>
-              2. APERTURE DIAPHRAGM
-            </h2>
+            <h2 style={title}>2. APERTURE DIAPHRAGM</h2>
 
             <svg
               width="240"
               height="240"
               viewBox="0 0 300 300"
-              style={{
-                display: "block",
-                margin: "0 auto",
-              }}
+              style={{ display: "block", margin: "0 auto" }}
             >
-              <circle
-                cx="150"
-                cy="150"
-                r="145"
-                fill="#020617"
-              />
-
+              <circle cx="150" cy="150" r="145" fill="#020617" />
               <circle
                 cx="150"
                 cy="150"
@@ -224,7 +195,6 @@ function App() {
                 stroke="#6b7280"
                 strokeWidth="4"
               />
-
               <circle
                 cx="150"
                 cy="150"
@@ -234,24 +204,17 @@ function App() {
                 strokeWidth="8"
               />
 
-              {Array.from({ length: 8 }).map(
-                (_, i) => (
-                  <polygon
-                    key={i}
-                    points={bladePoints(i)}
-                    fill="#30343b"
-                    stroke="#05070a"
-                    strokeWidth="2"
-                  />
-                )
-              )}
+              {Array.from({ length: 8 }).map((_, i) => (
+                <polygon
+                  key={i}
+                  points={bladePoints(i)}
+                  fill="#30343b"
+                  stroke="#05070a"
+                  strokeWidth="2"
+                />
+              ))}
 
-              <circle
-                cx="150"
-                cy="150"
-                r={apertureRadius}
-                fill="#f8fafc"
-              />
+              <circle cx="150" cy="150" r={apertureRadius} fill="#f8fafc" />
 
               <text
                 x="150"
@@ -276,107 +239,76 @@ function App() {
 
             <div style={currentBox}>
               Current:
-              <span style={{ color: "#c084fc" }}>
-                {" "}
-                {current.label}
-              </span>
-
+              <span style={{ color: "#c084fc" }}> {current.label}</span>
               <br />
-
-              <span
-                style={{
-                  color: "#63ff7a",
-                  fontSize: 16,
-                }}
-              >
+              <span style={{ color: "#63ff7a", fontSize: 16 }}>
                 {apertureType}
               </span>
             </div>
           </section>
         </aside>
 
-        {/* CENTER */}
         <section style={centerColumn}>
           <section style={card}>
             <h2 style={title}>
               3. PHOTO PREVIEW
-              <span style={{ color: "#e5e7eb" }}>
-                {" "}
-                (TREE STAYS IN FOCUS)
-              </span>
+              <span style={{ color: "#e5e7eb" }}> (CAR STAYS IN FOCUS)</span>
             </h2>
 
             <div style={photoFrame}>
-              {/* BLURRED BACKGROUND */}
               <img
                 src={`${import.meta.env.BASE_URL}aperture-scene.jpg`}
                 alt="Depth of field preview"
                 style={{
                   ...photoImage,
                   filter: `blur(${current.blur}px)`,
-                  transform:
-                    current.blur > 0
-                      ? "scale(1.04)"
-                      : "scale(1)",
+                  transform: current.blur > 0 ? "scale(1.04)" : "scale(1)",
                 }}
               />
 
-              {/* SHARP TREE OVERLAY */}
               <img
                 src={`${import.meta.env.BASE_URL}aperture-scene.jpg`}
                 alt=""
                 style={{
                   ...photoImage,
-                  clipPath:
-                    "polygon(0% 0%, 38% 0%, 50% 100%, 0% 100%)",
+                  clipPath: "polygon(8% 32%, 98% 32%, 98% 96%, 4% 96%)",
                   filter: "blur(0px)",
                   transform: "scale(1)",
                 }}
               />
 
-              {/* GLOW */}
               <div
                 style={{
                   position: "absolute",
-                  left: "6%",
-                  top: "8%",
-                  width: "36%",
-                  height: "84%",
+                  left: "8%",
+                  top: "32%",
+                  width: "88%",
+                  height: "62%",
                   borderRadius: "20px",
-                  boxShadow:
-                    "0 0 80px rgba(80,255,140,.18)",
-                  border:
-                    "1px solid rgba(120,255,170,.18)",
+                  boxShadow: "0 0 80px rgba(80,255,140,.18)",
+                  border: "1px solid rgba(120,255,170,.18)",
                   pointerEvents: "none",
                 }}
               />
 
-              {/* DEPTH GRADIENT */}
               <div
                 style={{
                   position: "absolute",
                   inset: 0,
                   background:
                     current.value <= 2.8
-                      ? "linear-gradient(to right, rgba(0,0,0,0) 28%, rgba(0,0,0,.12) 48%, rgba(0,0,0,.22) 100%)"
+                      ? "linear-gradient(to top, rgba(0,0,0,0) 40%, rgba(0,0,0,.20) 100%)"
                       : current.value <= 8
-                      ? "linear-gradient(to right, rgba(0,0,0,0) 50%, rgba(0,0,0,.08) 100%)"
-                      : "linear-gradient(to right, rgba(0,0,0,0) 100%, rgba(0,0,0,0) 100%)",
+                      ? "linear-gradient(to top, rgba(0,0,0,0) 65%, rgba(0,0,0,.10) 100%)"
+                      : "linear-gradient(to top, rgba(0,0,0,0) 100%, rgba(0,0,0,0) 100%)",
                   pointerEvents: "none",
                 }}
               />
 
-              {/* FOCUS BADGE */}
-              <div style={focusBadge}>
-                FOCUS POINT: CAR
-              </div>
+              <div style={focusBadge}>FOCUS POINT: CAR</div>
 
-              {/* APERTURE LABEL */}
-              <div style={photoLabel}>
-                {current.label}
-              </div>
+              <div style={photoLabel}>{current.label}</div>
 
-              {/* DEPTH LABEL */}
               <div style={depthBadge}>
                 {current.value <= 2.8
                   ? "SHALLOW DEPTH OF FIELD"
@@ -400,28 +332,21 @@ function App() {
               max={stops.length - 1}
               step="1"
               value={index}
-              onChange={(e) =>
-                setIndex(Number(e.target.value))
-              }
+              onChange={(e) => setIndex(Number(e.target.value))}
               style={{ width: "100%" }}
             />
 
             <div style={stopLabels}>
               {stops.map((stop) => (
-                <span key={stop.label}>
-                  {stop.label}
-                </span>
+                <span key={stop.label}>{stop.label}</span>
               ))}
             </div>
           </section>
         </section>
 
-        {/* RIGHT */}
         <aside style={rightColumn}>
           <section style={card}>
-            <h2 style={title}>
-              4. WHAT THIS APERTURE DOES
-            </h2>
+            <h2 style={title}>4. WHAT THIS APERTURE DOES</h2>
 
             <Info
               title="Light"
@@ -440,7 +365,7 @@ function App() {
               color="#c084fc"
               text={
                 current.value <= 2.8
-                  ? "Shallow depth of field. The tree stays sharp while the background becomes blurry."
+                  ? "Shallow depth of field. The car stays sharp while the background becomes blurry."
                   : current.value <= 8
                   ? "Medium depth of field. More background detail appears."
                   : "Deep depth of field. Most of the scene becomes sharp."
@@ -454,46 +379,34 @@ function App() {
                 current.value <= 2.8
                   ? "The focus point stays sharp while the background falls out of focus."
                   : current.value <= 8
-                  ? "The tree and some background detail stay readable."
+                  ? "The car and some background detail stay readable."
                   : "Foreground and background both appear sharp."
               }
             />
 
-            <Info
-              title="Best For"
-              color="#facc15"
-              text={current.best}
-            />
+            <Info title="Best For" color="#facc15" text={current.best} />
 
-            <Info
-              title="Watch Out For"
-              color="#ff6b6b"
-              text={current.warning}
-            />
+            <Info title="Watch Out For" color="#ff6b6b" text={current.warning} />
           </section>
 
           <section style={card}>
             <h2 style={title}>TIP</h2>
 
             <p style={{ lineHeight: 1.6 }}>
-              The focus point does not
-              automatically change when aperture
-              changes. Aperture changes how much
-              area in front of and behind that
-              focus point appears sharp.
+              The focus point does not automatically change when aperture
+              changes. Aperture changes how much area in front of and behind
+              that focus point appears sharp.
             </p>
           </section>
         </aside>
       </main>
 
-      {/* BOTTOM */}
       <section style={card}>
         <h2 style={title}>
           5. DEPTH OF FIELD COMPARISON
           <span style={{ color: "#e5e7eb" }}>
             {" "}
-            (Tree stays sharp while background
-            changes)
+            (Car stays sharp while background changes)
           </span>
         </h2>
 
@@ -517,10 +430,7 @@ function App() {
                   style={{
                     ...thumbImage,
                     filter: `blur(${stop.blur}px)`,
-                    transform:
-                      stop.blur > 0
-                        ? "scale(1.04)"
-                        : "scale(1)",
+                    transform: stop.blur > 0 ? "scale(1.04)" : "scale(1)",
                   }}
                 />
 
@@ -529,20 +439,15 @@ function App() {
                   alt=""
                   style={{
                     ...thumbImage,
-                    clipPath:
-                      "polygon(0% 0%, 38% 0%, 50% 100%, 0% 100%)",
+                    clipPath: "polygon(8% 32%, 98% 32%, 98% 96%, 4% 96%)",
                     filter: "blur(0px)",
                   }}
                 />
               </div>
 
-              <strong style={{ fontSize: 18 }}>
-                {stop.label}
-              </strong>
+              <strong style={{ fontSize: 18 }}>{stop.label}</strong>
 
-              <p style={thumbText}>
-                {stop.note}
-              </p>
+              <p style={thumbText}>{stop.note}</p>
             </button>
           ))}
         </div>
@@ -562,10 +467,7 @@ function Info({
 }) {
   return (
     <div style={infoBlock}>
-      <h3 style={{ color, margin: "0 0 6px 0" }}>
-        {title}
-      </h3>
-
+      <h3 style={{ color, margin: "0 0 6px 0" }}>{title}</h3>
       <p style={infoText}>{text}</p>
     </div>
   );
@@ -573,8 +475,7 @@ function Info({
 
 const page: React.CSSProperties = {
   minHeight: "100vh",
-  background:
-    "radial-gradient(circle at top left, #162033, #05070a 60%)",
+  background: "radial-gradient(circle at top left, #162033, #05070a 60%)",
   color: "white",
   fontFamily: "Arial, Helvetica, sans-serif",
   padding: "20px",
@@ -683,8 +584,7 @@ const photoImage: React.CSSProperties = {
   width: "100%",
   height: "100%",
   objectFit: "cover",
-  transition:
-    "filter 350ms ease, transform 350ms ease",
+  transition: "filter 350ms ease, transform 350ms ease",
 };
 
 const photoLabel: React.CSSProperties = {
