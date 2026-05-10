@@ -266,16 +266,30 @@ function App() {
                 }}
               />
 
-              <img
-                src={`${import.meta.env.BASE_URL}aperture-scene.jpg`}
-                alt=""
-                style={{
-                  ...photoImage,
-                  clipPath: "polygon(8% 32%, 98% 32%, 98% 96%, 4% 96%)",
-                  filter: "blur(0px)",
-                  transform: "scale(1)",
-                }}
-              />
+              {/* SHARP CAR MASK OVERLAY */}
+<div
+  style={{
+    ...photoImage,
+    backgroundImage: `url(${import.meta.env.BASE_URL}aperture-scene.jpg)`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+
+    maskImage: `url(${import.meta.env.BASE_URL}car-mask.png)`,
+    WebkitMaskImage: `url(${import.meta.env.BASE_URL}car-mask.png)`,
+
+    maskSize: "cover",
+    WebkitMaskSize: "cover",
+
+    maskPosition: "center",
+    WebkitMaskPosition: "center",
+
+    maskRepeat: "no-repeat",
+    WebkitMaskRepeat: "no-repeat",
+
+    filter: "blur(0px)",
+    transform: "scale(1)",
+  }}
+/>
 
               <div
                 style={{
@@ -434,15 +448,26 @@ function App() {
                   }}
                 />
 
-                <img
-                  src={`${import.meta.env.BASE_URL}aperture-scene.jpg`}
-                  alt=""
-                  style={{
-                    ...thumbImage,
-                    clipPath: "polygon(8% 32%, 98% 32%, 98% 96%, 4% 96%)",
-                    filter: "blur(0px)",
-                  }}
-                />
+                <div
+  style={{
+    ...thumbImage,
+    backgroundImage: `url(${import.meta.env.BASE_URL}aperture-scene.jpg)`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+
+    maskImage: `url(${import.meta.env.BASE_URL}car-mask.png)`,
+    WebkitMaskImage: `url(${import.meta.env.BASE_URL}car-mask.png)`,
+
+    maskSize: "cover",
+    WebkitMaskSize: "cover",
+
+    maskPosition: "center",
+    WebkitMaskPosition: "center",
+
+    maskRepeat: "no-repeat",
+    WebkitMaskRepeat: "no-repeat",
+  }}
+/>
               </div>
 
               <strong style={{ fontSize: 18 }}>{stop.label}</strong>
