@@ -368,7 +368,7 @@ function App() {
 
               {/* FOCUS BADGE */}
               <div style={focusBadge}>
-                FOCUS POINT: TREE
+                FOCUS POINT: CAR
               </div>
 
               {/* APERTURE LABEL */}
