@@ -64,7 +64,22 @@ function App() {
         * {
           box-sizing: border-box;
         }
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  background: #05070a;
+}
 
+.page {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
         .app-layout {
           display: grid;
           grid-template-columns: 300px 1fr 340px;
