@@ -17,6 +17,9 @@ function App() {
   const [index, setIndex] = useState(0);
   const current = stops[index];
 
+  const imageUrl = `${import.meta.env.BASE_URL}aperture-scene.jpg`;
+  const maskUrl = `${import.meta.env.BASE_URL}car-mask.png`;
+
   const apertureRadius = useMemo(() => {
     const maxRadius = 90;
     const minRadius = 24;
@@ -59,30 +62,32 @@ function App() {
   };
 
   return (
-    <div style={page}>
+    <div className="page" style={page}>
       <style>{`
         * {
           box-sizing: border-box;
         }
-html,
-body,
-#root {
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
-  background: #05070a;
-}
 
-.page {
-  width: 100%;
-  max-width: 100vw;
-  overflow-x: hidden;
-}
+        html,
+        body,
+        #root {
+          margin: 0;
+          padding: 0;
+          width: 100%;
+          max-width: 100%;
+          overflow-x: hidden;
+          background: #05070a;
+        }
+
+        .page {
+          width: 100%;
+          max-width: 100vw;
+          overflow-x: hidden;
+        }
+
         .app-layout {
           display: grid;
-          grid-template-columns: 300px 1fr 340px;
+          grid-template-columns: 300px minmax(0, 1fr) 340px;
           gap: 16px;
           align-items: start;
         }
@@ -92,6 +97,7 @@ body,
         .right-column {
           display: grid;
           gap: 14px;
+          min-width: 0;
         }
 
         .main-title {
@@ -100,6 +106,34 @@ body,
 
         .photo-frame {
           height: 520px;
+        }
+
+        .image-layer {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+          transition: filter 350ms ease, transform 350ms ease;
+        }
+
+        .sharp-mask-layer {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+          mask-size: cover;
+          -webkit-mask-size: cover;
+          mask-position: center;
+          -webkit-mask-position: center;
+          mask-repeat: no-repeat;
+          -webkit-mask-repeat: no-repeat;
+          transition: transform 350ms ease;
         }
 
         .fstop-button {
@@ -119,6 +153,11 @@ body,
           margin-top: 8px;
           color: #cbd5e1;
           font-size: 14px;
+        }
+
+        .card h2 {
+          white-space: normal;
+          overflow-wrap: break-word;
         }
 
         @media (max-width: 1100px) {
@@ -158,10 +197,6 @@ body,
         }
 
         @media (max-width: 600px) {
-          body {
-            margin: 0;
-          }
-
           .page {
             padding: 12px !important;
           }
@@ -182,6 +217,13 @@ body,
 
           .photo-frame {
             height: 260px;
+          }
+
+          .image-layer,
+          .sharp-mask-layer {
+            background-size: contain;
+            mask-size: contain;
+            -webkit-mask-size: contain;
           }
 
           .photo-label {
@@ -233,7 +275,10 @@ body,
       `}</style>
 
       <header style={header}>
-        <h1 className="main-title" style={mainTitle}>Aperture (F-Stop) Simulator</h1>
+        <h1 className="main-title" style={mainTitle}>
+          Aperture (F-Stop) Simulator
+        </h1>
+
         <p className="subtitle" style={subtitle}>
           See how aperture changes the amount of light entering the camera and
           how much of your photo is in focus.
@@ -246,7 +291,8 @@ body,
             <h2 style={title}>1. SELECT F-STOP</h2>
 
             <div style={wideText}>
-              WIDE<br />
+              WIDE
+              <br />
               <span style={smallText}>(More Light)</span>
             </div>
 
@@ -259,7 +305,10 @@ body,
                   style={{
                     ...button,
                     background: i === index ? "#4c1d75" : "#09101b",
-                    border: i === index ? "1px solid #a855f7" : "1px solid #1e293b",
+                    border:
+                      i === index
+                        ? "1px solid #a855f7"
+                        : "1px solid #1e293b",
                   }}
                 >
                   {stop.label}
@@ -268,7 +317,8 @@ body,
             </div>
 
             <div style={narrowText}>
-              NARROW<br />
+              NARROW
+              <br />
               <span style={smallText}>(Less Light)</span>
             </div>
           </section>
@@ -276,30 +326,71 @@ body,
           <section className="card" style={card}>
             <h2 style={title}>2. APERTURE DIAPHRAGM</h2>
 
-            <svg className="aperture-svg" width="240" height="240" viewBox="0 0 300 300" style={{ display: "block", margin: "0 auto" }}>
+            <svg
+              className="aperture-svg"
+              width="240"
+              height="240"
+              viewBox="0 0 300 300"
+              style={{ display: "block", margin: "0 auto" }}
+            >
               <circle cx="150" cy="150" r="145" fill="#020617" />
-              <circle cx="150" cy="150" r="132" fill="#111827" stroke="#6b7280" strokeWidth="4" />
-              <circle cx="150" cy="150" r="118" fill="#020617" stroke="#1f2937" strokeWidth="8" />
+              <circle
+                cx="150"
+                cy="150"
+                r="132"
+                fill="#111827"
+                stroke="#6b7280"
+                strokeWidth="4"
+              />
+              <circle
+                cx="150"
+                cy="150"
+                r="118"
+                fill="#020617"
+                stroke="#1f2937"
+                strokeWidth="8"
+              />
 
               {Array.from({ length: 8 }).map((_, i) => (
-                <polygon key={i} points={bladePoints(i)} fill="#30343b" stroke="#05070a" strokeWidth="2" />
+                <polygon
+                  key={i}
+                  points={bladePoints(i)}
+                  fill="#30343b"
+                  stroke="#05070a"
+                  strokeWidth="2"
+                />
               ))}
 
               <circle cx="150" cy="150" r={apertureRadius} fill="#f8fafc" />
 
-              <text x="150" y="42" textAnchor="middle" fill="white" fontSize="18">
+              <text
+                x="150"
+                y="42"
+                textAnchor="middle"
+                fill="white"
+                fontSize="18"
+              >
                 50mm 1:1.8
               </text>
 
-              <text x="150" y="270" textAnchor="middle" fill="white" fontSize="16">
+              <text
+                x="150"
+                y="270"
+                textAnchor="middle"
+                fill="white"
+                fontSize="16"
+              >
                 Ø 52mm
               </text>
             </svg>
 
             <div style={currentBox}>
-              Current:<span style={{ color: "#c084fc" }}> {current.label}</span>
+              Current:
+              <span style={{ color: "#c084fc" }}> {current.label}</span>
               <br />
-              <span style={{ color: "#63ff7a", fontSize: 16 }}>{apertureType}</span>
+              <span style={{ color: "#63ff7a", fontSize: 16 }}>
+                {apertureType}
+              </span>
             </div>
           </section>
         </aside>
@@ -312,32 +403,23 @@ body,
             </h2>
 
             <div className="photo-frame" style={photoFrame}>
-              <img
-                src={`${import.meta.env.BASE_URL}aperture-scene.jpg`}
-                alt="Depth of field preview"
+              <div
+                className="image-layer"
                 style={{
-                  ...photoImage,
+                  backgroundImage: `url(${imageUrl})`,
                   filter: `blur(${current.blur}px)`,
                   transform: current.blur > 0 ? "scale(1.04)" : "scale(1)",
                 }}
               />
 
               <div
+                className="sharp-mask-layer"
                 style={{
-                  ...photoImage,
-                  backgroundImage: `url(${import.meta.env.BASE_URL}aperture-scene.jpg)`,
-                  backgroundSize: "contain",
-                  backgroundPosition: "center",
-                  maskImage: `url(${import.meta.env.BASE_URL}car-mask.png)`,
-                  WebkitMaskImage: `url(${import.meta.env.BASE_URL}car-mask.png)`,
-                  maskSize: "cover",
-                  WebkitMaskSize: "cover",
-                  maskPosition: "center",
-                  WebkitMaskPosition: "center",
-                  maskRepeat: "no-repeat",
-                  WebkitMaskRepeat: "no-repeat",
+                  backgroundImage: `url(${imageUrl})`,
+                  maskImage: `url(${maskUrl})`,
+                  WebkitMaskImage: `url(${maskUrl})`,
                   filter: "blur(0px)",
-                  transform: "scale(1)",
+                  transform: current.blur > 0 ? "scale(1.04)" : "scale(1)",
                 }}
               />
 
@@ -355,8 +437,13 @@ body,
                 }}
               />
 
-              <div className="focus-badge" style={focusBadge}>FOCUS POINT: CAR</div>
-              <div className="photo-label" style={photoLabel}>{current.label}</div>
+              <div className="focus-badge" style={focusBadge}>
+                FOCUS POINT: CAR
+              </div>
+
+              <div className="photo-label" style={photoLabel}>
+                {current.label}
+              </div>
 
               <div className="depth-badge" style={depthBadge}>
                 {current.value <= 2.8
@@ -397,32 +484,48 @@ body,
           <section className="card" style={card}>
             <h2 style={title}>4. WHAT THIS APERTURE DOES</h2>
 
-            <Info title="Light" color="#84cc16" text={
-              current.value <= 2.8
-                ? "More light enters the camera. Useful in low light."
-                : current.value <= 8
-                ? "A moderate amount of light enters."
-                : "Less light enters the camera. You may need slower shutter speed or higher ISO."
-            } />
+            <Info
+              title="Light"
+              color="#84cc16"
+              text={
+                current.value <= 2.8
+                  ? "More light enters the camera. Useful in low light."
+                  : current.value <= 8
+                  ? "A moderate amount of light enters."
+                  : "Less light enters the camera. You may need slower shutter speed or higher ISO."
+              }
+            />
 
-            <Info title="Depth of Field" color="#c084fc" text={
-              current.value <= 2.8
-                ? "Shallow depth of field. The car stays sharp while the background becomes blurry."
-                : current.value <= 8
-                ? "Medium depth of field. More background detail appears."
-                : "Deep depth of field. Most of the scene becomes sharp."
-            } />
+            <Info
+              title="Depth of Field"
+              color="#c084fc"
+              text={
+                current.value <= 2.8
+                  ? "Shallow depth of field. The car stays sharp while the background becomes blurry."
+                  : current.value <= 8
+                  ? "Medium depth of field. More background detail appears."
+                  : "Deep depth of field. Most of the scene becomes sharp."
+              }
+            />
 
-            <Info title="Focus & Sharpness" color="#38bdf8" text={
-              current.value <= 2.8
-                ? "The focus point stays sharp while the background falls out of focus."
-                : current.value <= 8
-                ? "The car and some background detail stay readable."
-                : "Foreground and background both appear sharp."
-            } />
+            <Info
+              title="Focus & Sharpness"
+              color="#38bdf8"
+              text={
+                current.value <= 2.8
+                  ? "The focus point stays sharp while the background falls out of focus."
+                  : current.value <= 8
+                  ? "The car and some background detail stay readable."
+                  : "Foreground and background both appear sharp."
+              }
+            />
 
             <Info title="Best For" color="#facc15" text={current.best} />
-            <Info title="Watch Out For" color="#ff6b6b" text={current.warning} />
+            <Info
+              title="Watch Out For"
+              color="#ff6b6b"
+              text={current.warning}
+            />
           </section>
 
           <section className="card" style={card}>
@@ -439,7 +542,10 @@ body,
       <section className="card" style={card}>
         <h2 style={title}>
           5. DEPTH OF FIELD COMPARISON
-          <span style={{ color: "#e5e7eb" }}> (Car stays sharp while background changes)</span>
+          <span style={{ color: "#e5e7eb" }}>
+            {" "}
+            (Car stays sharp while background changes)
+          </span>
         </h2>
 
         <div className="thumb-grid">
@@ -450,34 +556,29 @@ body,
               onClick={() => setIndex(i)}
               style={{
                 ...thumbButton,
-                border: i === index ? "2px solid #a855f7" : "1px solid #273244",
+                border:
+                  i === index
+                    ? "2px solid #a855f7"
+                    : "1px solid #273244",
               }}
             >
               <div style={thumbFrame}>
-                <img
-                  src={`${import.meta.env.BASE_URL}aperture-scene.jpg`}
-                  alt={stop.label}
+                <div
+                  className="image-layer"
                   style={{
-                    ...thumbImage,
+                    backgroundImage: `url(${imageUrl})`,
                     filter: `blur(${stop.blur}px)`,
                     transform: stop.blur > 0 ? "scale(1.04)" : "scale(1)",
                   }}
                 />
 
                 <div
+                  className="sharp-mask-layer"
                   style={{
-                    ...thumbImage,
-                    backgroundImage: `url(${import.meta.env.BASE_URL}aperture-scene.jpg)`,
-                    backgroundSize: "contain",
-                    backgroundPosition: "center",
-                    maskImage: `url(${import.meta.env.BASE_URL}car-mask.png)`,
-                    WebkitMaskImage: `url(${import.meta.env.BASE_URL}car-mask.png)`,
-                    maskSize: "cover",
-                    WebkitMaskSize: "cover",
-                    maskPosition: "center",
-                    WebkitMaskPosition: "center",
-                    maskRepeat: "no-repeat",
-                    WebkitMaskRepeat: "no-repeat",
+                    backgroundImage: `url(${imageUrl})`,
+                    maskImage: `url(${maskUrl})`,
+                    WebkitMaskImage: `url(${maskUrl})`,
+                    transform: stop.blur > 0 ? "scale(1.04)" : "scale(1)",
                   }}
                 />
               </div>
@@ -504,13 +605,17 @@ function Info({
   return (
     <div style={infoBlock}>
       <h3 style={{ color, margin: "0 0 6px 0" }}>{title}</h3>
-      <p className="info-text" style={infoText}>{text}</p>
+      <p className="info-text" style={infoText}>
+        {text}
+      </p>
     </div>
   );
 }
 
 const page: React.CSSProperties = {
   minHeight: "100vh",
+  width: "100%",
+  overflowX: "hidden",
   background: "radial-gradient(circle at top left, #162033, #05070a 60%)",
   color: "white",
   fontFamily: "Arial, Helvetica, sans-serif",
@@ -537,6 +642,8 @@ const card: React.CSSProperties = {
   padding: "16px",
   boxShadow: "0 0 20px rgba(0,0,0,.35)",
   marginBottom: "16px",
+  maxWidth: "100%",
+  overflow: "hidden",
 };
 
 const title: React.CSSProperties = {
@@ -588,15 +695,6 @@ const photoFrame: React.CSSProperties = {
   border: "1px solid #273244",
   background: "#111827",
   boxShadow: "0 10px 40px rgba(0,0,0,.45)",
-};
-
-const photoImage: React.CSSProperties = {
-  position: "absolute",
-  inset: 0,
-  width: "100%",
-  height: "100%",
-  objectFit: "contain",
-  transition: "filter 350ms ease, transform 350ms ease",
 };
 
 const photoLabel: React.CSSProperties = {
@@ -670,14 +768,6 @@ const thumbFrame: React.CSSProperties = {
   overflow: "hidden",
   borderRadius: "8px",
   marginBottom: "8px",
-};
-
-const thumbImage: React.CSSProperties = {
-  position: "absolute",
-  inset: 0,
-  width: "100%",
-  height: "100%",
-  objectFit: "cover",
 };
 
 const thumbText: React.CSSProperties = {
