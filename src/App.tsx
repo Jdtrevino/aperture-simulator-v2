@@ -326,7 +326,7 @@ body,
                 style={{
                   ...photoImage,
                   backgroundImage: `url(${import.meta.env.BASE_URL}aperture-scene.jpg)`,
-                  backgroundSize: "cover",
+                  backgroundSize: "contain",
                   backgroundPosition: "center",
                   maskImage: `url(${import.meta.env.BASE_URL}car-mask.png)`,
                   WebkitMaskImage: `url(${import.meta.env.BASE_URL}car-mask.png)`,
@@ -468,7 +468,7 @@ body,
                   style={{
                     ...thumbImage,
                     backgroundImage: `url(${import.meta.env.BASE_URL}aperture-scene.jpg)`,
-                    backgroundSize: "cover",
+                    backgroundSize: "contain",
                     backgroundPosition: "center",
                     maskImage: `url(${import.meta.env.BASE_URL}car-mask.png)`,
                     WebkitMaskImage: `url(${import.meta.env.BASE_URL}car-mask.png)`,
@@ -595,7 +595,7 @@ const photoImage: React.CSSProperties = {
   inset: 0,
   width: "100%",
   height: "100%",
-  objectFit: "cover",
+  objectFit: "contain",
   transition: "filter 350ms ease, transform 350ms ease",
 };
 
