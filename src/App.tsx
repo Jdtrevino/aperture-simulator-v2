@@ -181,7 +181,7 @@ body,
           }
 
           .photo-frame {
-            height: 330px;
+            height: 260px;
           }
 
           .photo-label {
@@ -201,7 +201,7 @@ body,
           }
 
           .fstop-grid-mobile {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr;
           }
 
           .fstop-button {
